@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Busca Cep</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <style>
+        img {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div data-role="page" id="index">
+
+    <div data-role="header">
+        <h1>Busca CEP</h1>
+    </div>
+    <!-- /header -->
+
+    <div role="main" class="ui-content">
+        <label>CEP:</label>
+        <input type="text" name="cep" id="cep" value="">
+        <button id="search">Pesquisar</button>
+        <hr/>
+        <label>Estado:</label>
+        <input type="text" name="estado" id="estado" value="" readonly>
+        <label>Cidade:</label>
+        <input type="text" name="cidade" id="cidade" value="" readonly>
+        <label>Bairro:</label>
+        <input type="text" name="bairro" id="bairro" value="" readonly>
+        <label>Endereco:</label>
+        <input type="text" name="endereco" id="endereco" value="" readonly>
+    </div>
+    <!-- /content -->
+
+    <div data-role="footer" data-position="fixed">
+        <h4>&copy; CODIFICANDOTUDO</h4>
+    </div>
+    <!-- /footer -->
+</div>
+<!-- /page -->
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        $('#search').on('click', function () {
+            var cep_code = $('#cep').val();
+            if (cep_code.length <= 0) return;
+            $.get("http://apps.widenet.com.br/busca-cep/api/cep.json", {code: cep_code},
+                    function (result) {
+                        if (result.status != 1) {
+                            alert(result.message || "Houve um erro desconhecido");
+                            return;
+                        }
+                        $("input#cidade").val(result.city);
+                        $("input#bairro").val(result.district);
+                        $("input#endereco").val(result.address);
+                        $("input#estado").val(result.state);
+                    });
+        });
+    });
+</script>
+
+</body>
+</html>
